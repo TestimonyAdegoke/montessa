@@ -1,0 +1,324 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { InlineText } from "@/components/settings/inline-text"
+import { cn } from "@/lib/utils"
+import { Block, PropSchema } from "../types"
+import { motion } from "framer-motion"
+
+interface CtaBlockProps {
+  block: Block
+  onChange: (id: string, props: any) => void
+  selected?: boolean
+}
+
+export const CtaBlock = ({ block, onChange, selected }: CtaBlockProps) => {
+  const {
+    title,
+    subtitle,
+    primaryText,
+    primaryHref,
+    secondaryText,
+    secondaryHref,
+    align = "center",
+    variant = "solid",
+    backgroundType = "color",
+    backgroundColor = "transparent",
+    backgroundGradient,
+    backgroundBlur = 0,
+    backgroundPattern = "none",
+    showOverlay = false,
+    overlayOpacity = 50,
+    paddingTop = "py-24",
+    paddingBottom = "py-24",
+    animation = "fade"
+  } = block.props
+
+  const handleChange = (key: string, value: any) => {
+    onChange(block.id, { ...block.props, [key]: value })
+  }
+
+  const itemVariants = {
+    none: { opacity: 1, y: 0, scale: 1 },
+    fade: { 
+      hidden: { opacity: 0 },
+      visible: { opacity: 1, transition: { duration: 0.5 } }
+    },
+    slideUp: { 
+      hidden: { opacity: 0, y: 30 },
+      visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    },
+    zoom: { 
+      hidden: { opacity: 0, scale: 0.95 },
+      visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } }
+    }
+  }
+
+  const getItemVariants = () => {
+    const anim = animation || "fade"
+    if (anim === "none") return itemVariants.none;
+    return itemVariants[anim as keyof typeof itemVariants] || itemVariants.fade;
+  }
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  }
+
+  return (
+    <section
+      className={cn(
+        "px-6 md:px-12 border-t overflow-hidden relative",
+        paddingTop,
+        paddingBottom,
+        variant === "solid" && backgroundType === "color" && backgroundColor === "transparent" && "bg-primary text-primary-foreground",
+        variant === "soft" && backgroundType === "color" && backgroundColor === "transparent" && "bg-primary/[0.03] text-foreground",
+        variant === "muted" && backgroundType === "color" && backgroundColor === "transparent" && "bg-muted/40 text-foreground",
+        selected && "ring-2 ring-primary ring-offset-2 ring-offset-background"
+      )}
+      style={{ 
+        backgroundColor: backgroundType === 'color' ? backgroundColor : undefined,
+        background: backgroundType === 'gradient' ? backgroundGradient : undefined
+      }}
+    >
+      {/* Background Effects Layer */}
+      <div className="absolute inset-0 -z-10" style={{ filter: backgroundBlur > 0 ? `blur(${backgroundBlur}px)` : undefined }}>
+        {backgroundPattern !== "none" && (
+          <div className={cn(
+            "absolute inset-0 opacity-[0.03]",
+            backgroundPattern === "dots" && "bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px]",
+            backgroundPattern === "grid" && "bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] [background-size:40px_40px]",
+            backgroundPattern === "mesh" && "bg-[linear-gradient(45deg,rgba(0,0,0,0.05)_25%,transparent_25%,transparent_50%,rgba(0,0,0,0.05)_50%,rgba(0,0,0,0.05)_75%,transparent_75%,transparent)] [background-size:20px_20px]",
+            backgroundPattern === "waves" && "bg-[radial-gradient(circle_at_0_50%,transparent_9px,#000_10px,transparent_11px),radial-gradient(circle_at_100%_50%,transparent_9px,#000_10px,transparent_11px)] [background-size:20px_40px]"
+          )} />
+        )}
+        {/* Background Decorative Gradient for 'soft' variant fallback */}
+        {variant === "soft" && backgroundType === "color" && backgroundColor === "transparent" && (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.05] via-transparent to-primary/[0.02]" />
+        )}
+        {showOverlay && (
+          <div 
+            className="absolute inset-0 bg-black" 
+            style={{ opacity: overlayOpacity / 100 }}
+          />
+        )}
+      </div>
+
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className={cn(
+          "max-w-5xl mx-auto space-y-8",
+          align === "left" && "text-left",
+          align === "center" && "text-center",
+          align === "right" && "text-right ml-auto"
+        )}
+      >
+        <motion.div variants={getItemVariants() as any} className="space-y-4">
+          <InlineText
+            value={title}
+            onChange={(val) => handleChange("title", val)}
+            tagName="h2"
+            className={cn(
+              "text-4xl md:text-6xl font-black tracking-tight leading-[1.1]",
+              variant === "solid" && "text-primary-foreground"
+            )}
+            multiline
+            editable={selected}
+          />
+
+          <InlineText
+            value={subtitle}
+            onChange={(val) => handleChange("subtitle", val)}
+            tagName="p"
+            className={cn(
+              "text-lg md:text-xl max-w-2xl font-medium leading-relaxed",
+              align === "center" && "mx-auto",
+              align === "left" && "mx-0",
+              align === "right" && "ml-auto",
+              variant === "solid" ? "text-primary-foreground/80" : "text-muted-foreground"
+            )}
+            multiline
+            editable={selected}
+          />
+        </motion.div>
+
+        {(primaryText || secondaryText) && (
+          <motion.div
+            variants={getItemVariants() as any}
+            className={cn(
+              "flex flex-wrap gap-4 pt-4",
+              align === "left" && "justify-start",
+              align === "center" && "justify-center",
+              align === "right" && "justify-end"
+            )}
+          >
+            {primaryText && (
+              <Button
+                size="lg"
+                className={cn(
+                  "h-14 px-10 rounded-2xl text-lg font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all",
+                  variant === "solid" && "bg-background text-primary hover:bg-background/90",
+                  variant !== "solid" && "bg-primary text-primary-foreground"
+                )}
+              >
+                <InlineText
+                  value={primaryText}
+                  onChange={(val) => handleChange("primaryText", val)}
+                  tagName="span"
+                  editable={selected}
+                />
+              </Button>
+            )}
+
+            {secondaryText && (
+              <Button
+                size="lg"
+                variant="outline"
+                className={cn(
+                  "h-14 px-10 rounded-2xl text-lg font-bold border-2 hover:scale-105 active:scale-95 transition-all",
+                  variant === "solid" && "border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground",
+                  variant !== "solid" && "border-primary/20 text-primary hover:bg-primary/5"
+                )}
+              >
+                <InlineText
+                  value={secondaryText}
+                  onChange={(val) => handleChange("secondaryText", val)}
+                  tagName="span"
+                  editable={selected}
+                />
+              </Button>
+            )}
+          </motion.div>
+        )}
+      </motion.div>
+    </section>
+  )
+}
+
+export const ctaBlockSchema: PropSchema[] = [
+  { name: "title", label: "Heading", type: "textarea", group: "Content" },
+  { name: "subtitle", label: "Supporting Text", type: "textarea", group: "Content" },
+  { name: "primaryText", label: "Primary Button Label", type: "text", group: "Content" },
+  { name: "primaryHref", label: "Primary Button Link", type: "text", group: "Content" },
+  { name: "secondaryText", label: "Secondary Button Label", type: "text", group: "Content" },
+  { name: "secondaryHref", label: "Secondary Button Link", type: "text", group: "Content" },
+  {
+    name: "backgroundType",
+    label: "Background Type",
+    type: "select",
+    group: "Style",
+    options: [
+      { label: "Transparent", value: "color" },
+      { label: "Solid Color", value: "color" },
+      { label: "Gradient", value: "gradient" }
+    ],
+    default: "color"
+  },
+  { name: "backgroundColor", label: "Background Color", type: "color", group: "Style" },
+  { name: "backgroundGradient", label: "Background Gradient", type: "gradient", group: "Style" },
+  {
+    name: "backgroundPattern",
+    label: "Background Pattern",
+    type: "select",
+    group: "Style",
+    options: [
+      { label: "None", value: "none" },
+      { label: "Dots", value: "dots" },
+      { label: "Grid", value: "grid" },
+      { label: "Mesh", value: "mesh" },
+      { label: "Waves", value: "waves" }
+    ],
+    default: "none"
+  },
+  {
+    name: "backgroundBlur",
+    label: "Background Blur",
+    type: "number",
+    group: "Style",
+    min: 0,
+    max: 20,
+    step: 1,
+    default: 0
+  },
+  { name: "showOverlay", label: "Dark Overlay", type: "boolean", group: "Style" },
+  {
+    name: "overlayOpacity",
+    label: "Overlay Opacity",
+    type: "number",
+    group: "Style",
+    min: 0,
+    max: 100,
+    step: 10,
+    default: 50
+  },
+  {
+    name: "variant",
+    label: "Style Preset",
+    type: "select",
+    group: "Style",
+    options: [
+      { label: "Solid Primary", value: "solid" },
+      { label: "Soft", value: "soft" },
+      { label: "Muted", value: "muted" },
+    ],
+  },
+  {
+    name: "animation",
+    label: "Entrance Animation",
+    type: "select",
+    group: "Style",
+    options: [
+      { label: "Fade In", value: "fade" },
+      { label: "Slide Up", value: "slideUp" },
+      { label: "Zoom In", value: "zoom" },
+      { label: "None", value: "none" }
+    ],
+    default: "fade"
+  },
+  {
+    name: "align",
+    label: "Alignment",
+    type: "select",
+    group: "Layout",
+    options: [
+      { label: "Left", value: "left" },
+      { label: "Center", value: "center" },
+      { label: "Right", value: "right" },
+    ],
+  },
+  {
+    name: "paddingTop",
+    label: "Top Padding",
+    type: "select",
+    group: "Layout",
+    options: [
+      { label: "None", value: "py-0" },
+      { label: "Small", value: "py-12" },
+      { label: "Medium", value: "py-24" },
+      { label: "Large", value: "py-32" }
+    ],
+    default: "py-24"
+  },
+  {
+    name: "paddingBottom",
+    label: "Bottom Padding",
+    type: "select",
+    group: "Layout",
+    options: [
+      { label: "None", value: "py-0" },
+      { label: "Small", value: "py-12" },
+      { label: "Medium", value: "py-24" },
+      { label: "Large", value: "py-32" }
+    ],
+    default: "py-24"
+  }
+]
