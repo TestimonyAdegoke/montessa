@@ -106,7 +106,7 @@ export default function TestimonialsSection() {
 
                   {/* Content */}
                   <p className="text-lg leading-relaxed text-foreground">
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </p>
 
                   {/* Author */}
@@ -148,7 +148,7 @@ export default function TestimonialsSection() {
                 </div>
 
                 <p className="text-base leading-relaxed">
-                  "{testimonials[activeIndex].content}"
+                  &quot;{testimonials[activeIndex].content}&quot;
                 </p>
 
                 <div className="flex items-center gap-3 pt-4 border-t">

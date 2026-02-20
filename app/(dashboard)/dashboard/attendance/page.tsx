@@ -120,7 +120,7 @@ export default function AttendancePage() {
           <CardContent className="flex flex-col items-center justify-center py-12">
             <h3 className="text-lg font-semibold mb-2">No Students Found</h3>
             <p className="text-muted-foreground text-center">
-              This class doesn't have any active students enrolled.
+              This class doesn&apos;t have any active students enrolled.
             </p>
           </CardContent>
         </Card>

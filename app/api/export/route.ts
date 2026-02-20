@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = "force-dynamic"
+
 function toCSV(headers: string[], rows: string[][]): string {
   const escape = (val: string) => {
     if (val.includes(",") || val.includes('"') || val.includes("\n")) {

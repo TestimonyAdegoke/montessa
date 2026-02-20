@@ -485,7 +485,7 @@ export const SidebarRight = ({ selectedBlock, onBlockChange }: SidebarRightProps
                                                             ))}
                                                             {(!item.subItems || item.subItems.length === 0) && (
                                                                 <p className="text-[10px] text-muted-foreground/50 text-center py-2 italic">
-                                                                    No sub-items yet. Click "Add" to create mega menu links.
+                                                                    No sub-items yet. Click &quot;Add&quot; to create mega menu links.
                                                                 </p>
                                                             )}
                                                         </div>

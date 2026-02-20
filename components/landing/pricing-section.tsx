@@ -84,7 +84,7 @@ export default function PricingSection() {
             Simple, Transparent Pricing
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Choose the plan that fits your school's needs. All plans include a 14-day free trial.
+            Choose the plan that fits your school&apos;s needs. All plans include a 14-day free trial.
           </p>
 
           {/* Billing Toggle */}

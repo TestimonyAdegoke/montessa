@@ -420,7 +420,7 @@ export const SiteBuilder = ({ initialBlocks = [], initialPages, onSave, onSavePa
                         <div className="space-y-2">
                             <DialogTitle className="text-xl font-black tracking-tight uppercase">Replace Content?</DialogTitle>
                             <DialogDescription className="text-muted-foreground text-sm leading-relaxed">
-                                Applying the <span className="font-bold text-foreground underline underline-offset-4">"{pendingTemplate?.name}"</span> template will completely replace your current design. This action can be undone using the Undo button.
+                                Applying the <span className="font-bold text-foreground underline underline-offset-4">&quot;{pendingTemplate?.name}&quot;</span> template will completely replace your current design. This action can be undone using the Undo button.
                             </DialogDescription>
                         </div>
                     </div>

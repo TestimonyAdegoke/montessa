@@ -417,7 +417,7 @@ export default function StudentForm({ student, classes, mode }: StudentFormProps
                 <h3 className="font-semibold mb-4">Doctor Information</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="doctorName">Doctor's Name</Label>
+                    <Label htmlFor="doctorName">Doctor&apos;s Name</Label>
                     <Input
                       id="doctorName"
                       name="doctorName"
@@ -427,7 +427,7 @@ export default function StudentForm({ student, classes, mode }: StudentFormProps
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="doctorPhone">Doctor's Phone</Label>
+                    <Label htmlFor="doctorPhone">Doctor&apos;s Phone</Label>
                     <Input
                       id="doctorPhone"
                       name="doctorPhone"
